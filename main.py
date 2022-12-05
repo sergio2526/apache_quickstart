@@ -35,8 +35,9 @@ def run_pipeline(custom_args,beam_args):
         #Top 25 palabras
         palabras_top_lista = contadas | beam.combiners.Top.Of(5, key=lambda kv: kv[1])
         palabras_top = palabras_top_lista | beam.FlatMap(lambda x: x) #sacando palabras
-        formateado = palabras_top  | beam.Map(lambda kv: "%s,%d" % (kv[0], kv[1])) #Formateando salida
-        formateado | beam.Map(print)
+        formateado: PCollection[str] = palabras_top  | beam.Map(lambda kv: "%s,%d" % (kv[0], kv[1])) #Formateando salida
+        
+        formateado | beam.io.WriteToText(salida)
 
 if __name__ == "__main__":
     main()
