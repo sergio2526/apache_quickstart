@@ -56,7 +56,7 @@ def run_pipeline(custom_args,beam_args):
         palabras_top = palabras_top_lista | beam.FlatMap(lambda x: x) #sacando palabras
         formateado: PCollection[str] = palabras_top  | beam.Map(lambda kv: "%s,%d" % (kv[0], kv[1])) #Formateando salida
         
-        formateado | beam.io.WriteToText(salida)
+        formateado | beam.io.WriteToText(salida, file_name_suffix=".csv")
 
 if __name__ == "__main__":
     main()
